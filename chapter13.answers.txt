@@ -1,0 +1,18 @@
+/*********************************************
+Your name: Jack Ngog
+
+Question 2: When you run memory-user with a moderate memory size (100MB), the operating system allocates the requested virtual address space and maps it to physical frames. Using 'free' or 'top' in the terminal shows a noticeable increase in memory consumption for that specific process, demonstrating how the OS manages private address spaces.
+
+Question 4: When you allocate a memory size that exceeds your system's physical RAM, the operating system begins utilizing swap space on the disk (virtual memory virtualization). This results in a drastic drop in performance as the OS constantly pages data between physical memory and disk storage. If memory demands exceed both physical RAM and available swap, the OS may trigger the Out-Of-Memory (OOM) killer to terminate the process.
+
+Question 6: Challenges faced creating the program:
+1.  Using standard 32-bit integers to calculate byte sizes (megabytes * 1024 * 1024) causes an overflow when input values exceed 2048 MB. Switching to 'long long' resolved this.
+2. Basically, empty loops or unreferenced variables can be optimized away by gcc. Making sure the loop actively modifies the allocated buffer (buffer[i] += 1) forces the CPU and OS to actually keep the memory resident.
+3.  Testing memory limits inside a container or Codespace risked freezing the development environment if too much memory was requested without proper monitoring.
+
+Question 7: At least 3 tests performed and observed:
+- Test 1 (500 MB): Running `./memory-user 500 &` followed by `free`. Physical memory usage rose steadily by roughly 500 MB. The program ran smoothly without performance degradation.
+- Test 2 (2000 MB / 2 GB): Running `./memory-user 2000 &`. System memory usage spiked significantly. Response times in the terminal slowed slightly as the OS managed a larger working set.
+- Test 3 Exceeding system limits, 16000 MB on a small VM: Running `./memory-user 16000 &`. The system started swapping heavily, responsiveness dropped to near zero, and eventually the OS kernel invoked the OOM killer, safely terminating the memory-user process to protect the system.
+
+Question 8: The experiments illustrate the core concept of memory virtualization: user-space programs remain completely oblivious to physical constraints, interacting only with a virtual address space. The operating system handles the heavy lifting behind the scenes—allocating, mapping, swapping, and protecting memory boundaries.
